@@ -319,8 +319,25 @@ translate([0,0,Main_Tube_Height*0.2-5+2]){
 }
 }
 
+//鸠尾板
+translate([0,0,Main_Tube_Height*0.3-5+2]){
 
+    rotate([0, 0,    120]) {
+        translate([Secondary_Cage_Outer_Radius * cos(30), Secondary_Cage_Outer_Radius * sin(30), 0]) {
+            rotate([0, 0, 30]) {
+       
+			translate([5,0,-30]){
+difference(){
+cube([10,30,200],center=true);
+cube([12,10,160],center=true);
+}
+}
 
+        }
+    }
+
+}
+}
 
 
 module Secondary_Mirror_Holder(){
