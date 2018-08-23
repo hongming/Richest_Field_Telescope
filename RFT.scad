@@ -1,5 +1,27 @@
 //环形切口，来自https://www.youmagine.com/designs/openscad-arc
 include <ARC.scad>;
+//旋转调焦器，来自https://www.thingiverse.com/thing:1936225/files,其中引用了https://github.com/JohK/nutsnbolts和https://github.com/openscad/MCAD
+use <Helical_Crayford_Focuser.scad>;
+
+
+
+
+
+
+//副镜架Secondary Cage
+Secondary_Cage_Outer_Radius=100;//副镜架外半径
+Secondary_Cage_Inner_Radius=Secondary_Cage_Outer_Radius-12.5;//副镜架内半径
+Secondary_Cage_Thickness=9;//副镜架厚度
+Secondary_Mirror_Base_Radius=25; //副镜底座半径
+Secondary_Mirror_Base_Thickness=20; //副镜底座厚度
+//镜筒主体
+Main_Tube_Height=450;	//镜筒主体高度
+//主镜底座
+Mirror_Box_Base_Thickness=5; //主镜箱底座厚度
+//镜筒支架-旋转角度
+Cube_Truss_Angle=atan((Secondary_Cage_Outer_Radius*tan(30)-15)/Main_Tube_Height);
+//镜筒支架-支架长度
+Cube_Truss_Length= sqrt(Main_Tube_Height*Main_Tube_Height+Secondary_Cage_Outer_Radius*tan(30)*Secondary_Cage_Outer_Radius*tan(30));
 
 
 //底部六边形多边形module
@@ -83,14 +105,12 @@ module Mirror_Cell_Right_Angle(width, height, length) {
 }
 
 
-
-
 //中间支撑杆A
 
 module Cube_Truss_Left(width, height, length) {
 
     color("Gainsboro", 1.0) {
-        translate([-15 - 10, 2, 4.5]) {
+        translate([-15 - 10, 0, 0.5*Secondary_Cage_Thickness]) {
             difference() {
 
                 cube([width, length, height]);
@@ -105,8 +125,8 @@ module Cube_Truss_Left(width, height, length) {
 //中间支撑杆B
 module Cube_Truss_Right(width, height, length) {
     color("Gainsboro", 1.0) {
-        translate([-15 - 10, -12, 4.5]) {
-            difference() {
+        translate([-15 - 10, -10, 0.5*Secondary_Cage_Thickness]) {
+          difference() {
 
                 cube([width, length, height]);
 
@@ -120,20 +140,13 @@ module Cube_Truss_Right(width, height, length) {
 
 
 
-//副镜架Secondary Cage
-Secondary_Cage_Outer_Radius=100;//副镜架外半径
-Secondary_Cage_Inner_Radius=Secondary_Cage_Outer_Radius-12.5;//副镜架内半径
-Secondary_Cage_Thickness=9;//副镜架厚度
-Secondary_Mirror_Base_Radius=25; //副镜底座半径
-Secondary_Mirror_Base_Thickness=20; //副镜底座厚度
-//镜筒主题
-Main_Tube_Height=450;	//镜筒主体高度
-//主镜底座
-Mirror_Box_Base_Thickness=5; //主镜箱底座厚度
+
+
+
 
 //Module-副镜架固定角铁
 module Secondary_Cage_Right_Angle(width, height, length) {
-    translate([-width / 2, 0, length / 2 + 4.5]) {
+    translate([-width / 2, 0, length / 2 + 0.5*Secondary_Cage_Thickness]) {
         difference() {
             cube([width, height, length], center = true);
             translate([2, -2, 2]) {
@@ -150,15 +163,24 @@ translate([0, 0, Main_Tube_Height]) {
     rotate([180, 0, 90]) {
 
 //生成副镜架框体
+                color("Silver", 1.0){
         difference() {
             cylinder(Secondary_Cage_Thickness, Secondary_Cage_Outer_Radius, Secondary_Cage_Outer_Radius, center, $fa = 1, center = true);
             cylinder(Secondary_Cage_Thickness+2, Secondary_Cage_Inner_Radius,Secondary_Cage_Inner_Radius, center, $fa = 1, center = true);
         }
+    }
 
-
-//生成副镜基座
+//生成副镜调节座
         cylinder(Secondary_Mirror_Base_Thickness, Secondary_Mirror_Base_Radius, Secondary_Mirror_Base_Radius, center, $fa = 1, center = true);
 
+//副镜座
+
+rotate([0,0,210]){
+    
+    Secondary_Mirror_Holder();
+    }
+    
+    
 
 
         for (a = [0: 1: 2]) {
@@ -166,11 +188,11 @@ translate([0, 0, Main_Tube_Height]) {
 		rotate([0, 0, 90]) {cube([1,Secondary_Cage_Outer_Radius,4]);}//生成副镜连接支架
                 translate([-Secondary_Cage_Inner_Radius + 2, 0, 0]) {
                   Secondary_Cage_Right_Angle(15, 25, 15); //生成副镜架固定角铁
-                    rotate([-4.499, 0, 0]) {            //4.499为预估
-                        Cube_Truss_Left(10, 450, 10); //连接杆组-左半部分
+                    rotate([-Cube_Truss_Angle, 0, 0]) {            //4.499为预估
+                        Cube_Truss_Left(10, Cube_Truss_Length-0.5*Secondary_Cage_Thickness, 10); //连接杆组-左半部分
                     }
-                    rotate([4.499, 0, 0]) {
-                        Cube_Truss_Right(10, 450, 10); //连接杆组-右半部分
+                    rotate([Cube_Truss_Angle, 0, 0]) {
+                        Cube_Truss_Right(10, Cube_Truss_Length-0.5*Secondary_Cage_Thickness, 10); //连接杆组-右半部分
                     }
 
                 }
@@ -178,6 +200,17 @@ translate([0, 0, Main_Tube_Height]) {
         }
     }
 }
+ 
+
+//调焦器
+ 
+translate([Secondary_Cage_Outer_Radius-10,-55,Main_Tube_Height*0.8+45]){
+ rotate([0,90,150]){
+Focuser();
+    TubeAdapter();}
+    
+    }
+ 
 
 //调焦座部分支架
 
@@ -190,7 +223,7 @@ difference() {
     //调焦座部分支架的切割部件
         rotate([0,0,60]){
             translate([0,0,-2]){
-        3D_arc(w=32,r=Secondary_Cage_Outer_Radius,deg=218,fn=6,h=5);
+        3D_arc(w=40,r=Secondary_Cage_Outer_Radius,deg=218,fn=6,h=5);
         }
 
         }
@@ -213,6 +246,8 @@ for (a = [0: 1: 1]) {
 
 
 
+//求解左右支架分叉角度
+
 
 //最低托盘
 
@@ -226,7 +261,7 @@ for (a = [0: 1: 2]) {
     rotate([0, 0, a * 120]) {
         translate([Secondary_Cage_Outer_Radius * cos(30), Secondary_Cage_Outer_Radius * sin(30), 0]) {
             rotate([0, 0, 30]) {
-                Mirror_Box_Right_Angle(15, 115, 15);
+                Mirror_Box_Right_Angle(15, 2*Secondary_Cage_Outer_Radius*tan(30), 15);
             }
         }
     }
@@ -237,17 +272,19 @@ for (a = [0: 1: 2]) {
  
  
 //主镜片
+
+color("LightYellow", 1.0){
 translate([0,0,23.5]){
     cylinder(15, 75, 75, center, $fa = 1, center = true);
 
-    }
+    }}
 
 //最低托盘上的主镜架
 for (a = [0: 1: 2]) {
     rotate([0, 0, a * 120]) {
         translate([70 * cos(30),70 * sin(30), 0]) {
             rotate([0, 0, 30]) {
-                Mirror_Cell_Right_Angle(30, 150, 10);
+                Mirror_Cell_Right_Angle(30, 180, 10);
             }
         }
     }
@@ -281,3 +318,43 @@ translate([0,0,Main_Tube_Height*0.2-5+2]){
 
 }
 }
+
+
+
+
+
+module Secondary_Mirror_Holder(){
+    //引用自https://www.thingiverse.com/thing:3059131/files
+    $s2 = sqrt(2);
+$HPart = 69.44;
+$diam = 38.14;
+$Tslice = $diam*$s2/2;
+$fn=100;
+
+$Hnut = 5;
+$Wnut = 8.1;
+$Wnutfloor = 3;
+difference()
+{
+difference() //cut off a 45 degree chunk at the right height
+{
+translate([0,0,$HPart/2])
+  cylinder(h=$HPart,d=$diam,center=true); //create main body
+
+translate([0,0,$HPart-$diam/2])
+  translate([0,-$s2/2*($Tslice/2),-$s2/2*($Tslice/2)+$s2*$Tslice/2])
+    rotate([45,0,0])  
+      cylinder(h=$Tslice,d=$s2*$diam,center=true); //create cutter
+}
+
+union()
+{
+translate([0,0,$Wnutfloor+$Hnut])
+  cylinder(d=15,h=$HPart); //wide well to seat nut
+translate([0,0,-1])
+  cylinder(d=5,h=$HPart); //hole for screw
+translate([0,0,$Wnutfloor])
+  cylinder(r = $Wnut / 2 / cos(180 / 6) + 0.05, h=$Hnut, $fn=6); //M5 nut
+
+}    
+}}

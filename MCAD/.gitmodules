@@ -1,0 +1,6 @@
+[submodule "SolidPython"]
+	path = SolidPython
+	url = https://github.com/SolidCode/SolidPython.git
+[submodule "ThingDoc"]
+	path = ThingDoc
+	url = https://github.com/SolidCode/ThingDoc.git
