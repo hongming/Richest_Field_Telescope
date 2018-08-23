@@ -1,3 +1,7 @@
+//环形切口，来自https://www.youmagine.com/designs/openscad-arc
+include <ARC.scad>;
+
+
 //底部六边形多边形module
 module Mirror_Box_Base(height, radius, fn) {
     fudge = 1 / cos(180 / fn);
@@ -175,6 +179,39 @@ translate([0, 0, Main_Tube_Height]) {
     }
 }
 
+//调焦座部分支架
+
+translate([0,0,Main_Tube_Height*0.8]){
+
+difference() {
+    Mirror_Box_Base(2, Secondary_Cage_Outer_Radius, 6);
+    cylinder(12, Secondary_Cage_Inner_Radius, Secondary_Cage_Inner_Radius, center = true);
+
+    //调焦座部分支架的切割部件
+        rotate([0,0,60]){
+            translate([0,0,-2]){
+        3D_arc(w=32,r=Secondary_Cage_Outer_Radius,deg=218,fn=6,h=5);
+        }
+
+        }
+}
+}
+
+//调焦座部分支架的固定角铁
+translate([0,0,Main_Tube_Height*0.8-5+2]){
+for (a = [0: 1: 1]) {
+    rotate([0, 0, a * 240]) {
+        translate([Secondary_Cage_Outer_Radius * cos(30), Secondary_Cage_Outer_Radius * sin(30), 0]) {
+            rotate([0, 0, 30]) {
+                Mirror_Box_Right_Angle(15, 40, 15);
+            }
+        }
+    }
+
+}
+}
+
+
 
 
 //最低托盘
@@ -199,6 +236,11 @@ for (a = [0: 1: 2]) {
 
  
  
+//主镜片
+translate([0,0,23.5]){
+    cylinder(15, 75, 75, center, $fa = 1, center = true);
+
+    }
 
 //最低托盘上的主镜架
 for (a = [0: 1: 2]) {
@@ -209,4 +251,33 @@ for (a = [0: 1: 2]) {
             }
         }
     }
+}
+
+
+//最低托盘上的主镜架的固定角铁，用于连接鸠尾板A点
+translate([0,0,Main_Tube_Height*0.4-5+2]){
+//for (a = [0: 1: 1]) {
+    rotate([0, 0,   120]) {
+        translate([Secondary_Cage_Outer_Radius * cos(30), Secondary_Cage_Outer_Radius * sin(30), 0]) {
+            rotate([0, 0, 30]) {
+                Mirror_Box_Right_Angle(15, 70, 15);
+//            }
+        }
+    }
+
+}
+}
+
+//最低托盘上的主镜架的固定角铁，用于连接鸠尾板B点
+translate([0,0,Main_Tube_Height*0.2-5+2]){
+
+    rotate([0, 0,    120]) {
+        translate([Secondary_Cage_Outer_Radius * cos(30), Secondary_Cage_Outer_Radius * sin(30), 0]) {
+            rotate([0, 0, 30]) {
+                Mirror_Box_Right_Angle(15, 80, 15);
+
+        }
+    }
+
+}
 }
