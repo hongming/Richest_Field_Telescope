@@ -1,3 +1,7 @@
+/*
+    口径168，焦距534，厚度32，精密退火派勒克斯材料
+*/
+
 //环形切口，来自https://www.youmagine.com/designs/openscad-arc
 include <ARC.scad>;
 //旋转调焦器，来自https://www.thingiverse.com/thing:1936225/files,其中引用了https://github.com/JohK/nutsnbolts和https://github.com/openscad/MCAD
@@ -5,8 +9,10 @@ use <Helical_Crayford_Focuser.scad>;
 
 
 
-
-
+//主镜Primary Mirror
+Primary_Mirror_Thickness=32;
+Primary_Mirror_Radius=84;
+Primary_Mirror_Focal_Length=534;
 
 //副镜架Secondary Cage
 Secondary_Cage_Outer_Radius=100;//副镜架外半径
@@ -15,7 +21,7 @@ Secondary_Cage_Thickness=9;//副镜架厚度
 Secondary_Mirror_Base_Radius=25; //副镜底座半径
 Secondary_Mirror_Base_Thickness=20; //副镜底座厚度
 //镜筒主体
-Main_Tube_Height=450;	//镜筒主体高度
+Main_Tube_Height=Primary_Mirror_Focal_Length-Primary_Mirror_Thickness-15-Secondary_Cage_Outer_Radius;	//镜筒主体高度
 //主镜底座
 Mirror_Box_Base_Thickness=5; //主镜箱底座厚度
 //镜筒支架-旋转角度
@@ -274,8 +280,9 @@ for (a = [0: 1: 2]) {
 //主镜片
 
 color("LightYellow", 1.0){
-translate([0,0,23.5]){
-    cylinder(15, 75, 75, center, $fa = 1, center = true);
+translate([0,0,
+    Mirror_Box_Base_Thickness+10+0.5*Primary_Mirror_Thickness]){
+    cylinder(Primary_Mirror_Thickness, Primary_Mirror_Radius, Primary_Mirror_Radius, center, $fa = 1, center = true);
 
     }}
 
