@@ -15,9 +15,9 @@ Primary_Mirror_Radius=84;
 Primary_Mirror_Focal_Length=534;
 
 //副镜架Secondary Cage
-Secondary_Cage_Outer_Radius=100;//副镜架外半径
+Secondary_Cage_Outer_Radius=112.5;//副镜架外半径
 Secondary_Cage_Inner_Radius=Secondary_Cage_Outer_Radius-12.5;//副镜架内半径
-Secondary_Cage_Thickness=9;//副镜架厚度
+Secondary_Cage_Thickness=10;//副镜架厚度
 Secondary_Mirror_Base_Radius=25; //副镜底座半径
 Secondary_Mirror_Base_Thickness=20; //副镜底座厚度
 //镜筒主体
@@ -210,7 +210,7 @@ rotate([0,0,210]){
 
 //调焦器
  
-translate([Secondary_Cage_Outer_Radius-10,-55,Main_Tube_Height*0.8+45]){
+translate([Secondary_Cage_Outer_Radius-10,-55,Main_Tube_Height-Secondary_Cage_Thickness*0.5-40]){
  rotate([0,90,150]){
 Focuser();
     TubeAdapter();}
@@ -220,7 +220,7 @@ Focuser();
 
 //调焦座部分支架
 
-translate([0,0,Main_Tube_Height*0.8]){
+translate([0,0,Main_Tube_Height-Secondary_Cage_Thickness*0.5-80]){
 
 difference() {
     Mirror_Box_Base(2, Secondary_Cage_Outer_Radius, 6);
@@ -279,7 +279,7 @@ for (a = [0: 1: 2]) {
  
 //主镜片
 
-color("LightYellow", 1.0){
+color("red", 1.0){
 translate([0,0,
     Mirror_Box_Base_Thickness+10+0.5*Primary_Mirror_Thickness]){
     cylinder(Primary_Mirror_Thickness, Primary_Mirror_Radius, Primary_Mirror_Radius, center, $fa = 1, center = true);

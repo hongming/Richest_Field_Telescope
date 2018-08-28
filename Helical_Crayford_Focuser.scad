@@ -8,7 +8,7 @@ use <nutsnbolts/materials.scad>
 part = "Preview"; // [Focuser:Focuser,Adapter:Adapter,Both:Focuser and Adapter,Preview:Preview]
 
 // This is the maximum diameter the focuser will accept with some bending, I use mine with a tapered draw tube which is 35mm wide at both ends, but only 34mm wide in the middle. Change this value to the maximum outer diameter of your draw tube. For a 2" draw tube with 1.5mm wall thickness, this should be 54mm (2*2.54mm + 2*1.5mm). 
-drawTubeMaxOuterDiameter = 35; // [31:0.1:100]
+drawTubeMaxOuterDiameter = 50.8; // [31:0.1:100]
 
 /* [Bearings and Screws] */
 
