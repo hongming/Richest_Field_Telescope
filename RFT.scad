@@ -1,4 +1,10 @@
 /*
+2018年9月4日
+    底板采用环氧板，Mirror_Box_Base_Thickness厚度减少至3毫米；
+    底板角铁移动到底部，改为拖底式。
+*/
+
+/*
     口径168，焦距534，厚度32，精密退火派勒克斯材料
 */
 
@@ -20,10 +26,10 @@ Secondary_Cage_Inner_Radius=Secondary_Cage_Outer_Radius-12.5;//副镜架内半�
 Secondary_Cage_Thickness=10;//副镜架厚度
 Secondary_Mirror_Base_Radius=25; //副镜底座半径
 Secondary_Mirror_Base_Thickness=20; //副镜底座厚度
-//镜筒主体
+//镜筒主体？
 Main_Tube_Height=Primary_Mirror_Focal_Length-Primary_Mirror_Thickness-15-Secondary_Cage_Outer_Radius;	//镜筒主体高度
 //主镜底座
-Mirror_Box_Base_Thickness=5; //主镜箱底座厚度
+Mirror_Box_Base_Thickness=3; //主镜箱底座厚度
 //镜筒支架-旋转角度
 Cube_Truss_Angle=atan((Secondary_Cage_Outer_Radius*tan(30)-15)/Main_Tube_Height);
 //镜筒支架-支架长度
@@ -37,7 +43,7 @@ module Mirror_Box_Base(height, radius, fn) {
 }
 
 module Mirror_Box_Right_Angle(width, height, length) {
-    translate([-width / 2, 0, length / 2 + 5]) {
+    translate([-width / 2, 0, length / 2 + Mirror_Box_Base_Thickness]) {
         difference() {
             cube([width, height, length], center = true);
             translate([-2, -2, 2]) {
@@ -192,7 +198,7 @@ rotate([0,0,210]){
         for (a = [0: 1: 2]) {
             rotate([0, 0, a * 120]) {
 		rotate([0, 0, 90]) {cube([1,Secondary_Cage_Outer_Radius,4]);}//生成副镜连接支架
-                translate([-Secondary_Cage_Inner_Radius + 2, 0, 0]) {
+                translate([-Secondary_Cage_Inner_Radius , 0, 0]) {
                   Secondary_Cage_Right_Angle(15, 25, 15); //生成副镜架固定角铁
                     rotate([-Cube_Truss_Angle, 0, 0]) {            //4.499为预估
                         Cube_Truss_Left(10, Cube_Truss_Length-0.5*Secondary_Cage_Thickness, 10); //连接杆组-左半部分
@@ -265,7 +271,7 @@ difference() {
 //最底托盘的边缘角铁连接件
 for (a = [0: 1: 2]) {
     rotate([0, 0, a * 120]) {
-        translate([Secondary_Cage_Outer_Radius * cos(30), Secondary_Cage_Outer_Radius * sin(30), 0]) {
+        translate([(Secondary_Cage_Outer_Radius+2) * cos(30), (Secondary_Cage_Outer_Radius+2) * sin(30), -Mirror_Box_Base_Thickness-2]) {
             rotate([0, 0, 30]) {
                 Mirror_Box_Right_Angle(15, 2*Secondary_Cage_Outer_Radius*tan(30), 15);
             }
