@@ -79,7 +79,7 @@ module prism(l, w, h) {
 
 //底部支撑大梁
 module Mirror_Cell_Right_Angle(width, height, length) {
-    translate([-width / 2, 0, length / 2 + 5]) {
+    translate([-width / 2, 0, length / 2 + Mirror_Box_Base_Thickness]) {
         difference() {
 
             union() {
@@ -308,9 +308,9 @@ for (a = [0: 1: 2]) {
 translate([0,0,Main_Tube_Height*0.4-5+2]){
 //for (a = [0: 1: 1]) {
     rotate([0, 0,   120]) {
-        translate([Secondary_Cage_Outer_Radius * cos(30), Secondary_Cage_Outer_Radius * sin(30), 0]) {
+        translate([(Secondary_Cage_Outer_Radius+2) * cos(30), (Secondary_Cage_Outer_Radius+2) * sin(30), 0]) {
             rotate([0, 0, 30]) {
-                Mirror_Box_Right_Angle(15, 70, 15);
+                Mirror_Box_Right_Angle(15, 80, 15);
 //            }
         }
     }
@@ -322,7 +322,7 @@ translate([0,0,Main_Tube_Height*0.4-5+2]){
 translate([0,0,Main_Tube_Height*0.2-5+2]){
 
     rotate([0, 0,    120]) {
-        translate([Secondary_Cage_Outer_Radius * cos(30), Secondary_Cage_Outer_Radius * sin(30), 0]) {
+        translate([(Secondary_Cage_Outer_Radius+2) * cos(30), (Secondary_Cage_Outer_Radius+2) * sin(30), 0]) {
             rotate([0, 0, 30]) {
                 Mirror_Box_Right_Angle(15, 80, 15);
 
@@ -336,7 +336,7 @@ translate([0,0,Main_Tube_Height*0.2-5+2]){
 translate([0,0,Main_Tube_Height*0.3-5+2]){
 
     rotate([0, 0,    120]) {
-        translate([Secondary_Cage_Outer_Radius * cos(30), Secondary_Cage_Outer_Radius * sin(30), 0]) {
+        translate([(Secondary_Cage_Outer_Radius+2) * cos(30), (Secondary_Cage_Outer_Radius+2) * sin(30), 0]) {
             rotate([0, 0, 30]) {
        
 			translate([5,0,-30]){
