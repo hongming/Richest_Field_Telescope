@@ -191,13 +191,18 @@ rotate([0,0,210]){
     
     Secondary_Mirror_Holder();
     }
+
+//生成副镜连接支架
+for (a = [0: 1: 3]) {
+            rotate([0, 0, a * 90]) {
+		rotate([0, 0, 90]) {cube([1,Secondary_Cage_Outer_Radius,4]);}
+    }}
     
     
+for (a = [0: 1: 2]) {
+            rotate([0, 0, a * 120]) { 
 
 
-        for (a = [0: 1: 2]) {
-            rotate([0, 0, a * 120]) {
-		rotate([0, 0, 90]) {cube([1,Secondary_Cage_Outer_Radius,4]);}//生成副镜连接支架
                 translate([-Secondary_Cage_Inner_Radius , 0, 0]) {
                   Secondary_Cage_Right_Angle(15, 25, 15); //生成副镜架固定角铁
                     rotate([-Cube_Truss_Angle, 0, 0]) {            //4.499为预估
@@ -243,7 +248,7 @@ difference() {
 }
 
 //调焦座部分支架的固定角铁
-translate([0,0,Main_Tube_Height*0.8-5+2]){
+translate([0,0,Main_Tube_Height-Secondary_Cage_Thickness*0.5-80]){
 for (a = [0: 1: 1]) {
     rotate([0, 0, a * 240]) {
         translate([Secondary_Cage_Outer_Radius * cos(30), Secondary_Cage_Outer_Radius * sin(30), 0]) {
